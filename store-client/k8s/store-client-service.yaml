@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: store-client-service
+spec:
+  selector:
+    name: store-client
+  type: LoadBalancer
+  ports:
+    - port: 3000
+      targetPort: 3000
+      #nodePort

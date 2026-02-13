@@ -1,0 +1,17 @@
+{
+  "name": "store-provisioning-platform",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run start:backend",
+    "start:backend": "npm --prefix store-api run start",
+    "start:client": "npm --prefix store-client run start",
+    "start:all": "concurrently \"npm: start:backend\" \"npm: start:client\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "axios": "^1.13.5"
+  }
+}

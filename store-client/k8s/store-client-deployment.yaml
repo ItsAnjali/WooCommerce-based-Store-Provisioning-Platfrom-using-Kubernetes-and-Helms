@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: store-client-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: store-client
+  template: 
+    metadata: 
+      labels: 
+        name: store-client  
+    spec:
+      containers:
+        - name: store-client-con
+          image: anjali0418/store-client
+          ports: 
+            - containerPort: 3000 
