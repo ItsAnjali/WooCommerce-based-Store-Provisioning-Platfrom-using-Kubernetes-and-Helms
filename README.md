@@ -1,203 +1,81 @@
 
-
 🚀 Store Provisioning Platform (WooCommerce Multi-Tenant Engine)
-
 This project is a Kubernetes-based Store Provisioning Engine that automatically creates isolated WooCommerce (WordPress) stores on demand using Helm.
-
 It simulates how SaaS platforms dynamically provision customer environments with proper isolation, orchestration, and lifecycle management.
 
+📌 Project Overview
+The platform allows users to:
+-Create stores from a dashboard
+-Automatically provision WordPress (WooCommerce-ready) using Helm
+-Run each store in an isolated Kubernetes namespace
+-Track provisioning state
+-Delete stores and clean resources automatically
 
----
-
-🧠 System Architecture
-
+🏗️ Architecture
 Frontend (React)
-
-Dashboard to create & delete stores
-
-Displays status (Provisioning → Ready)
-
-Shows store URL dynamically
-
+-Dashboard UI
+-Trigger store creation/deletion
 
 Backend (Node.js + Express)
-
-Acts as provisioning engine
-
-Generates unique store names
-
-Creates Kubernetes namespaces
-
-Runs Helm install/uninstall commands
-
-Manages store lifecycle
-
-Handles port-forwarding for local access
-
+-Provisioning orchestrator
+-Runs Helm install/uninstall
+-Updates store status
 
 Database (MongoDB)
+-Stores metadata and status
 
-Stores store metadata
+Kubernetes + Helm
+-Deploys WooCommerce store per namespace
 
-Tracks provisioning status
+🔄 Flow
+Create Store → Helm deploys resources → Store becomes ready → Place order in WooCommerce → Delete Store → Helm uninstall + namespace cleanup.
 
-Maintains URLs and credentials
-
-
-Infrastructure (Kubernetes + Helm)
-
-Each store runs in its own namespace
-
-WordPress + MariaDB deployed via Helm
-
-Complete resource isolation per store
-
-
-
-----
-
-⚙️ End-to-End Flow
-
-1. User clicks Create Store
-
-
-2. Backend:
-
-Generates unique namespace
-
-Saves store entry (Provisioning)
-
-Installs WordPress via Helm
-
-
-
-3. Kubernetes creates:
-
-Namespace
-
-WordPress pod
-
-MariaDB pod
-
-Services & PVC
-
-
-
-4. Backend waits for pods to become Ready
-
-
-5. Port-forward is started automatically
-
-
-6. Store status updated to Ready
-
-
-7. Store URL becomes accessible
-
-
-8. Store can be deleted → Helm uninstall + namespace cleanup
-
-
-
-
----
-
-🔒 Isolation & Multi-Tenancy
+🔒 Isolation & Reliability
 
 Dedicated namespace per store
+Separate pods, services, DB, PVC
+Cleanup guaranteed via namespace deletion
+Failed provisioning marked in DB
 
-Separate database per store
+🧪 Local Setup
 
-Separate services & pods
+minikube start
+helm repo add bitnami https://charts.bitnami.com/bitnami
 
-PVC-backed persistent storage
+Backend:
+cd store-api
+npm install
+npm start
 
-No shared runtime resources
+Frontend:
+cd store-client
+npm install
+npm start
 
+🌍 Production-like (VPS / k3s)
 
-This ensures strong tenant isolation.
+curl -sfL https://get.k3s.io | sh -
+helm install store-platform ./helm/store-platform
 
+Production changes via Helm values:
+-ingress + domain
+-storage class
+-secrets
+-TLS
 
----
+📦 Helm Charts
+helm/store-platform/
+Includes local and production values files.
 
-🛠 Tech Stack
+🧠 System Design & Tradeoffs
+-Namespace-per-store for isolation
+-Helm used for reproducible deployments
+-Status tracking for failure handling
+-Cleanup via Helm uninstall + namespace delete
 
-React.js
+Production requires:
+-DNS + ingress
+-managed storage
+-secure secrets handling
 
-Node.js + Express
-
-MongoDB + Mongoose
-
-Kubernetes (Minikube)
-
-Helm (Bitnami WordPress Chart)
-
-WooCommerce (via WordPress)
-
-
-
----
-
-🚧 Key Features Implemented
-
-Dynamic Helm provisioning
-
-Namespace-based isolation
-
-Automatic port-forward per store
-
-Store lifecycle management
-
-WooCommerce customization support
-
-Product creation using WP-CLI
-
-Clean uninstall & namespace deletion
-
-Status tracking (Provisioning / Ready / Failed)
-
-
-
----
-
-📦 Running Locally
-
-1. Start Minikube
-
-
-2. Install Helm
-
-
-3. Run backend
-
-
-4. Run frontend
-
-
-5. Create stores from dashboard
-
-
-
-Stores are accessible via dynamic localhost ports.
-
-
----
-
-🌍 Production Deployment Plan
-
-For production:
-
-Replace port-forward with Ingress
-
-Use LoadBalancer / NGINX Ingress Controller
-
-Configure domains per store
-
-Add TLS via cert-manager
-
-Deploy on AWS/GCP free tier or VPS (k3s)
-
-Store secrets securely
-
-Add ResourceQuota & LimitRange per namespace
-
+Thank you for reading and reviewing my project.
