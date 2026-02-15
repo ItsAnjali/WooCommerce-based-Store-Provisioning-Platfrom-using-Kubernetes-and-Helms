@@ -43,18 +43,18 @@ minikube start
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
 Backend:
-cd store-api
-npm install
+cd store-api,
+npm install,
 npm start
 
 Frontend:
-cd store-client
-npm install
+cd store-client,
+npm install,
 npm start
 
 🌍 Production-like (VPS / k3s)
 
-curl -sfL https://get.k3s.io | sh -
+curl -sfL https://get.k3s.io | sh - ,
 helm install store-platform ./helm/store-platform
 
 Production changes via Helm values:
@@ -73,9 +73,11 @@ Includes local and production values files.
 -Status tracking for failure handling
 -Cleanup via Helm uninstall + namespace delete
 
-Production requires:
+Production considerations (planned for future improvements):
 -DNS + ingress
--managed storage
--secure secrets handling
+-Managed storage
+-Secure secrets handling
+
+The current version focuses on core functionality, with these enhancements kept as next-step improvements toward a more production-ready setup.
 
 Thank you for reading and reviewing my project.
